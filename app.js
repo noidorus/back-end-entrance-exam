@@ -1,7 +1,9 @@
-const express = require('express');
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsdoc = require('swagger-jsdoc');
+import express, { json } from 'express';
+import process from 'node:process';
+import { serve, setup } from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 
 const options = {
@@ -24,8 +26,8 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 
-app.use(express.json());
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use(json());
+app.use('/docs', serve, setup(specs));
 
 /**
  * @swagger
