@@ -1,33 +1,35 @@
 import express, { json } from 'express';
 import process from 'node:process';
-import { serve, setup } from 'swagger-ui-express';
-import swaggerJsdoc from 'swagger-jsdoc';
+import routes from './src/routes/index.js';
+// import { serve, setup } from 'swagger-ui-express';
+// import swaggerJsdoc from 'swagger-jsdoc';
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'REST API пример',
-      version: '1.0.0',
-      description: 'Пример REST API с CRUD-операциями для ресурса "items"',
-    },
-    servers: [
-      {
-        url: `http://localhost:${PORT}`,
-        description: `Локальный сервер, использующий порт ${PORT}`,
-      },
-    ],
-  },
-  apis: ['./app.js'],
-};
+// const options = {
+//   definition: {
+//     openapi: '3.0.0',
+//     info: {
+//       title: 'REST API пример',
+//       version: '1.0.0',
+//       description: 'Пример REST API с CRUD-операциями для ресурса "items"',
+//     },
+//     servers: [
+//       {
+//         url: `http://localhost:${PORT}`,
+//         description: `Локальный сервер, использующий порт ${PORT}`,
+//       },
+//     ],
+//   },
+//   apis: ['./app.js'],
+// };
 
-const specs = swaggerJsdoc(options);
+// const specs = swaggerJsdoc(options);
 
 app.use(json());
-app.use('/docs', serve, setup(specs));
+app.use(routes);
+// app.use('/docs', serve, setup(specs));
 
 /**
  * @swagger
