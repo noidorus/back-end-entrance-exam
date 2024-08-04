@@ -1,5 +1,9 @@
 import restfulApi from '../api/restful-api.js';
 
+/**
+ * Получение списка всех предметов
+ * @returns {Promise<{id: string, name: string, data: {[key: string]: string} | null}[]>}
+ */
 const getItems = async () => {
   try {
     return await restfulApi();
@@ -8,6 +12,11 @@ const getItems = async () => {
   }
 };
 
+/**
+ * Получение данных по ID
+ * @param {string} id
+ * @returns {Promise<{id: string, name: string, data: {[key: string]: string} | null}>}
+ */
 const getItemById = async (id) => {
   try {
     return await restfulApi(`/${id}`);
@@ -16,6 +25,11 @@ const getItemById = async (id) => {
   }
 };
 
+/**
+ * Создание нового предмета
+ * @param {{name: string, data?: {[key: string]: string}}} body
+ * @returns {Promise<{id: string, name: string, data: {[key: string]: string} | null}>}
+ */
 const createItem = async (body) => {
   try {
     return await restfulApi('', { method: 'POST', body: JSON.stringify(body) });
@@ -24,6 +38,12 @@ const createItem = async (body) => {
   }
 };
 
+/**
+ * Обновление предмета
+ * @param {string} id
+ * @param {object} body
+ * @returns {Promise<any>}
+ */
 const updateItem = async (id, body) => {
   try {
     return await restfulApi(`/${id}`, { method: 'PATCH', body: JSON.stringify(body) });
@@ -32,6 +52,11 @@ const updateItem = async (id, body) => {
   }
 };
 
+/**
+ * Удаление предмета из API
+ * @param {string} id
+ * @returns {Promise<any>}
+ */
 const deleteItem = async (id) => {
   try {
     return await restfulApi(`/${id}`, { method: 'DELETE' });

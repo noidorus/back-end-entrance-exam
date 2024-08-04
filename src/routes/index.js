@@ -27,7 +27,7 @@ router.use('/items', itemsRoutes);
  *                   type: string
  *                   example: "Добро пожаловать в наше REST API!"
  */
-router.get('/', (req, res) => {
+router.get('/', (_, res) => {
   res.json({ message: 'Добро пожаловать в наше REST API!' });
 });
 

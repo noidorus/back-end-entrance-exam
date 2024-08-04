@@ -1,54 +1,144 @@
 import express from 'express';
-import cache from '../services/cacheService.js';
+import cacheController from '../controllers/cacheController.js';
 const router = express.Router();
 
 /**
- * Получение данных с проверкой наличия в кеше
+ * @swagger
+ * tags:
+ *   name: Cache
+ *   description: Операции с ресурсом "cache"
  */
-router.route('/:key').get((req, res) => {
-  const { key } = req.params;
-  const value = cache.get(key);
-
-  if (value) {
-    res.send({ data: { key, value }, message: 'Данные найдены в кеше' });
-  } else {
-    res.status(404).json({ message: 'Данные не найдены в кеше' });
-  }
-});
 
 /**
- * Обновление данных в кеше
+ * @swagger
+ * /cache/{key}:
+ *   get:
+ *     summary: Получить данные из кеша
+ *     tags:
+ *       - Cache
+ *     parameters:
+ *       - name: key
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Данные из кеша
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 key:
+ *                   type: string
+ *                   example: "ad12"
+ *                 value:
+ *                   oneOf:
+ *                     - type: object
+ *                     - type: string
+ *                     - type: array
+ *                     - type: number
+ *                   description: Значения для обновления в кеше
  */
-router.put('/:key', (req, res) => {
-  const { key } = req.params;
-  const { value } = req.body;
 
-  if (value) {
-    cache.set(key, value);
-    res.send({ data: { key, value }, message: 'Данные обновлены в кеше' });
-  } else {
-    res.status(449).json({ message: 'Некорректные данные в запросе!' });
-  }
-});
+router.get('/:key', cacheController.getCache);
 
 /**
- * Очистка кеша
+ * @swagger
+ * /cache/{key}:
+ *   put:
+ *     summary: Обновление данных в кеше
+ *     tags:
+ *       - Cache
+ *     parameters:
+ *       - name: key
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *                value:
+ *                  oneOf:
+ *                    - type: object
+ *                    - type: string
+ *                    - type: array
+ *                    - type: number
+ *                  description: Значения для обновления в кеше
+ *     responses:
+ *       200:
+ *         description: Обновленные данные из кеша
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 key:
+ *                   type: string
+ *                   example: "ad12"
+ *                 value:
+ *                   oneOf:
+ *                     - type: string
+ *                     - type: object
+ *                     - type: array
+ *                     - type: number
  */
-router.delete('/', (_, res) => {
-  cache.clear();
-  res.json({ message: 'Кеш очищен' });
-});
+router.put('/:key', cacheController.updateCache);
 
 /**
- * Изменение размера кеша
+ * @swagger
+ * /{key}:
+ *   delete:
+ *     summary: Удалить элемент по KEY
+ *     tags:
+ *       - Cache
+ *     parameters:
+ *       - name: key
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Успешное удаление записи
  */
-router.patch('/size', (req, res) => {
-  const newSize = req.body.size;
-  if (!newSize && typeof newSize !== 'number') {
-    return res.status(449).json({ message: 'Некорректные данные в запросе!' });
-  }
-  cache.resize(newSize);
-  res.json({ message: `Размер кеша изменен на ${newSize}` });
-});
+router.delete('/', cacheController.clearCache);
+
+/**
+ * @swagger
+ * /cache/size:
+ *   patch:
+ *     summary: Изменение размера кеша
+ *     tags:
+ *       - Cache
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *                size:
+ *                  type: number
+ *                  description: Размер кеша
+ *                  required: true
+ *                  example: 100
+ *     responses:
+ *       200:
+ *         description: Обновленные данные из кеша
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Размер кеша изменен на 100"
+ */
+router.patch('/size', cacheController.resizeCache);
 
 export default router;

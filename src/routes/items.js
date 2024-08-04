@@ -11,7 +11,6 @@ const router = express.Router();
 
 /**
  * @swagger
- *
  * /items:
  *   get:
  *     summary: Получить список всех элементов
@@ -32,8 +31,10 @@ const router = express.Router();
  *                     properties:
  *                       id:
  *                         type: string
+ *                         example: "1"
  *                       name:
  *                         type: string
+ *                         example: "Item 1"
  *                       data:
  *                         type: object
  *                         additionalProperties:
@@ -46,7 +47,6 @@ router.get('/', itemsController.getItems);
 
 /**
  * @swagger
- *
  * /items/{id}:
  *   get:
  *     summary: Получить элемент по ID
@@ -81,13 +81,11 @@ router.get('/', itemsController.getItems);
  *                     "key2": "value2",
  *                     "key3": "value3"
  *                   }
- *
  */
 router.get('/:id', itemsController.getItemById);
 
 /**
  * @swagger
- *
  * /items:
  *   post:
  *     summary: Создать новый элемент
@@ -146,7 +144,6 @@ router.post('/', itemsController.createItem);
 
 /**
  * @swagger
- *
  * /{id}:
  *   patch:
  *     summary: Обновить элемент по ID
@@ -157,7 +154,7 @@ router.post('/', itemsController.createItem);
  *         in: path
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
  *     requestBody:
  *       content:
  *         application/json:
@@ -202,7 +199,6 @@ router.patch('/:id', itemsController.updateItem);
 
 /**
  * @swagger
- *
  * /{id}:
  *   delete:
  *     summary: Удалить элемент по ID
@@ -213,7 +209,7 @@ router.patch('/:id', itemsController.updateItem);
  *         in: path
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
  *     responses:
  *       204:
  *         description: Успешное удаление записи
