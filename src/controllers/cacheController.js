@@ -30,7 +30,7 @@ const clearCache = (_, res) => {
 const resizeCache = (req, res) => {
   const { size } = req.body;
 
-  if (!size && typeof size !== 'number') {
+  if (typeof size !== 'number') {
     return res.status(400).json({ message: 'size: должен быть числом' });
   }
 
